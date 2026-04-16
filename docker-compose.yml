@@ -41,6 +41,8 @@ services:
       - ./public/custom.css:/opt/kimai/public/custom.css:ro
       - ./public/sign-red.png:/opt/kimai/public/sign-red.png:ro
       - ./templates/base.html.twig:/opt/kimai/templates/base.html.twig:ro
+      - ./templates/login.html.twig:/opt/kimai/templates/security/login.html.twig:ro
+      - ./templates/password-reset-layout.html.twig:/opt/kimai/templates/security/password-reset/layout.html.twig:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8001/"]
