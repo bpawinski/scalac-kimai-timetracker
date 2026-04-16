@@ -36,6 +36,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
+      - ./kimai-src:/opt/kimai:delegated
       - kimai_data:/opt/kimai/var
       - ./config/local.yaml:/opt/kimai/config/packages/local.yaml:ro
       - ./public/custom.css:/opt/kimai/public/custom.css:ro

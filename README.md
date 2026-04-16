@@ -2,42 +2,48 @@
 
 Local development setup for [Kimai](https://www.kimai.org/) time-tracking, running via Docker.
 
+No need to download Kimai manually — Docker pulls the image automatically from Docker Hub on first run.
+
 ## Requirements
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Mac, Windows, Linux)
 - Git
 
-## Quick start
+## Setup for a new machine (colleague)
 
 ```bash
-# 1. Clone the repo
-git clone <repo-url>
-cd kimai-local
+# 1. Clone the repository
+git clone https://github.com/bpawinski/scalac-kimai-timetracker.git
+cd scalac-kimai-timetracker
 
 # 2. Start containers
+#    Docker will automatically download Kimai and MySQL images on first run (~500MB, takes a few minutes)
 docker compose up -d
 
-# 3. Wait ~30 seconds for Kimai to install, then run the setup script
+# 3. Wait ~30 seconds for Kimai to finish installing, then run the one-time setup script
 bash scripts/setup.sh
 ```
 
-Open http://localhost:8001
+Open http://localhost:8001 — done.
+
+> The `kimai-src/` directory is intentionally gitignored. Docker mounts only the config files
+> from this repo (`config/`, `public/`, `templates/`) into the container.
 
 ## Credentials
 
-| Role       | Email                | Password   | Display name      |
-|------------|----------------------|------------|-------------------|
-| Super Admin| admin@kimai.local    | admin12345 |                   |
-| Developer  | dev1@kimai.local     | devpass1   | Piotr Kowalski    |
-| Developer  | dev2@kimai.local     | devpass2   | Anna Nowak        |
-| Developer  | dev3@kimai.local     | devpass3   | Tomasz Wiśniewski |
-| Developer  | dev4@kimai.local     | devpass4   | Katarzyna Wójcik  |
-| Developer  | dev5@kimai.local     | devpass5   | Marek Kamiński    |
+| Role        | Email               | Password   | Display name      |
+|-------------|---------------------|------------|-------------------|
+| Super Admin | admin@kimai.local   | admin12345 |                   |
+| Developer   | dev1@kimai.local    | devpass1   | Piotr Kowalski    |
+| Developer   | dev2@kimai.local    | devpass2   | Anna Nowak        |
+| Developer   | dev3@kimai.local    | devpass3   | Tomasz Wiśniewski |
+| Developer   | dev4@kimai.local    | devpass4   | Katarzyna Wójcik  |
+| Developer   | dev5@kimai.local    | devpass5   | Marek Kamiński    |
 
 ## Project structure
 
 ```
-kimai-local/
+scalac-kimai-timetracker/
 ├── docker-compose.yml          # Docker services definition
 ├── config/
 │   └── local.yaml              # Kimai config overrides (mounted into container)
@@ -45,8 +51,9 @@ kimai-local/
 │   └── custom.css              # Custom styles (mounted into container)
 ├── templates/
 │   └── base.html.twig          # Modified base template (mounted into container)
-└── scripts/
-    └── setup.sh                # One-time user & data setup script
+├── scripts/
+│   └── setup.sh                # One-time user & data setup script
+└── KIMAI_DOCKER_COMMANDS.md    # Full command reference (Polish)
 ```
 
 ## Customisations applied
@@ -66,7 +73,7 @@ kimai-local/
 # Start
 docker compose up -d
 
-# Stop
+# Stop (keeps data)
 docker compose down
 
 # Stop and delete all data (full reset)
@@ -81,4 +88,16 @@ docker exec kimai-app /opt/kimai/bin/console kimai:user:list
 # Reload config after editing local.yaml
 docker exec kimai-app /opt/kimai/bin/console kimai:reload --env=prod
 docker exec kimai-app chown -R www-data:www-data /opt/kimai/var/cache
+```
+
+## Contributing changes
+
+```bash
+# Pull latest changes from the repo
+git pull
+
+# After making changes, commit and push
+git add .
+git commit -m "describe your change"
+git push
 ```

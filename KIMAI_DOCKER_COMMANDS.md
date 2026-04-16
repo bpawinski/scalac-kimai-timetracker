@@ -128,6 +128,37 @@ Ctrl+X
 # Administration > Users > Edit admin > Change password
 ```
 
+## Git - Version Control
+
+```bash
+# Sprawdzenie statusu zmian
+git status
+
+# Podgląd zmian
+git diff
+
+# Dodaj wszystkie zmiany do staging
+git add .
+
+# Dodaj konkretny plik
+git add docker-compose.yml
+
+# Commit zmian
+git commit -m "opis zmian"
+
+# Push na GitHub
+git push
+
+# Pull najnowszych zmian z GitHub (np. od kolegi)
+git pull
+
+# Historia commitów
+git log --oneline
+
+# Cofnij zmiany w pliku (przed commitem)
+git checkout -- docker-compose.yml
+```
+
 ## Full Workflow
 
 1. **Setup** (pierwszy raz)

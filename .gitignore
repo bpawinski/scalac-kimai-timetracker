@@ -1,2 +1,4 @@
 .DS_Store
 .claude/
+kimai-src/
+node_modules/
