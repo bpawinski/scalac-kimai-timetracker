@@ -36,10 +36,10 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - ./kimai-src:/opt/kimai:delegated
       - kimai_data:/opt/kimai/var
       - ./config/local.yaml:/opt/kimai/config/packages/local.yaml:ro
       - ./public/custom.css:/opt/kimai/public/custom.css:ro
+      - ./public/sign-red.png:/opt/kimai/public/sign-red.png:ro
       - ./templates/base.html.twig:/opt/kimai/templates/base.html.twig:ro
     restart: unless-stopped
     healthcheck:
