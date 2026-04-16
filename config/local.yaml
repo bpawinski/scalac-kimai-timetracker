@@ -1,0 +1,16 @@
+kimai:
+    timesheet:
+        default_begin: '08:00'
+    calendar:
+        businessHours:
+            begin: '08:00'
+            end: '16:00'
+    permissions:
+        sets:
+            TIMESHEET: ['view_own_timesheet','create_own_timesheet','edit_own_timesheet','export_own_timesheet','delete_own_timesheet','weekly_own_timesheet']
+        maps:
+            ROLE_TEAMLEAD: ['ACTIVITIES_TEAMLEAD','PROJECTS_TEAMLEAD','CUSTOMERS_TEAMLEAD','TIMESHEET_OTHER','TIMESHEET','PROFILE','EXPORT','BILLABLE','TAGS','REPORTING','EVERYONE']
+            ROLE_ADMIN: ['ACTIVITIES','PROJECTS','CUSTOMERS','INVOICE_ALL','TIMESHEET','TIMESHEET_OTHER','PROFILE','TEAMS','RATE','RATE_OTHER','EXPORT','BILLABLE','TAGS','LOCKDOWN','REPORTING','EVERYONE']
+            ROLE_SUPER_ADMIN: ['ACTIVITIES','PROJECTS','CUSTOMERS','INVOICE_ALL','TIMESHEET','TIMESHEET_OTHER','PROFILE','PROFILE_OTHER','USER','TEAMS','RATE','RATE_OTHER','EXPORT','BILLABLE','TAGS','LOCKDOWN','REPORTING','EVERYONE']
+        roles:
+            ROLE_SUPER_ADMIN: ['hourly-rate_own_profile','hourly-rate_other_profile','roles_own_profile','supervisor_own_profile','system_information','system_configuration','plugins','edit_exported_timesheet','teams_own_profile','view_team_member','view_all_data','contract_other_profile','hours_other_profile','create_export_template']

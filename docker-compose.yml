@@ -1,0 +1,54 @@
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: kimai-db
+    environment:
+      MYSQL_DATABASE: kimai
+      MYSQL_USER: kimai
+      MYSQL_PASSWORD: kimai_test_password_123
+      MYSQL_ROOT_PASSWORD: kimai_root_password_123
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "kimai", "-pkimai_test_password_123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Kimai Application
+  kimai:
+    image: kimai/kimai2:apache
+    container_name: kimai-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: mysql://kimai:kimai_test_password_123@mysql:3306/kimai
+      ADMIN_EMAIL: admin@kimai.local
+      ADMIN_PASSWORD: admin123
+      TRUSTED_HOSTS: '^.+$'
+      MAILER_FROM: noreply@kimai.local
+    ports:
+      - "8001:8001"
+    volumes:
+      - kimai_data:/opt/kimai/var
+      - ./config/local.yaml:/opt/kimai/config/packages/local.yaml:ro
+      - ./public/custom.css:/opt/kimai/public/custom.css:ro
+      - ./templates/base.html.twig:/opt/kimai/templates/base.html.twig:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mysql_data:
+    driver: local
+  kimai_data:
+    driver: local

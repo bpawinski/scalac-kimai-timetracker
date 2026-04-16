@@ -1,0 +1,11 @@
+/* Hide play button (live time tracking) */
+.ticktac { display: none !important; }
+
+/* Weekend columns - dark green */
+th.weekend {
+    background-color: #145a32 !important;
+    color: #fff !important;
+}
+td.weekend {
+    background-color: #1a4731 !important;
+}
