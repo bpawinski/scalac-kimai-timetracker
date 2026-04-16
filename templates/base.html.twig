@@ -137,20 +137,15 @@
     {{ webloader.init_frontend_loader() }}
     {% set event = trigger(constant('App\\Event\\ThemeEvent::JAVASCRIPT')) %}
     {{ event.content|raw }}
+    <script src="/custom.js"></script>
 {% endblock %}
 
 {% block navbar_brand_class %} d-none d-lg-inline-flex{% endblock %}
 
 {% block app_logo %}
-    {% set mylogo %}{{ parent() }}{% endset %}
-    {# only for mobile view #}
-    <div class="d-flex justify-content-start flex-fill d-lg-none">
-        <h2 class="page-title d-lg-none ps-2">
-            {{- block('page_title') -}}
-        </h2>
-        {{ mylogo }}
-    </div>
-    {{ mylogo }}
+    <a href="{{ path("homepage") }}" class="navbar-brand navbar-brand-autodark">
+        <img src="/sign-red.png" alt="Logo" style="max-height: 32px; width: auto;">
+    </a>
 {% endblock %}
 
 {% block navbar_search %}

@@ -1,4 +1,4 @@
-# Kimai Local
+# Kimai Local — Scalac Time Tracker
 
 Local development setup for [Kimai](https://www.kimai.org/) time-tracking, running via Docker.
 
@@ -44,28 +44,62 @@ Open http://localhost:8001 — done.
 
 ```
 scalac-kimai-timetracker/
-├── docker-compose.yml          # Docker services definition
+├── docker-compose.yml                          # Docker services definition
 ├── config/
-│   └── local.yaml              # Kimai config overrides (mounted into container)
+│   └── local.yaml                              # Kimai config overrides (mounted into container)
 ├── public/
-│   └── custom.css              # Custom styles (mounted into container)
+│   ├── custom.css                              # Custom styles
+│   ├── custom.js                               # Custom behaviour (auto-select, delete row)
+│   └── sign-red.png                            # Scalac company logo
 ├── templates/
-│   └── base.html.twig          # Modified base template (mounted into container)
+│   ├── base.html.twig                          # Main app layout (navbar logo, custom.css/js)
+│   ├── login.html.twig                         # Login page (custom.css, logo)
+│   └── password-reset-layout.html.twig         # Password reset page (custom.css, logo)
 ├── scripts/
-│   └── setup.sh                # One-time user & data setup script
-└── KIMAI_DOCKER_COMMANDS.md    # Full command reference (Polish)
+│   └── setup.sh                                # One-time user & data setup script
+└── KIMAI_DOCKER_COMMANDS.md                    # Full command reference (Polish)
 ```
 
 ## Customisations applied
 
+### Branding
+- **Company logo** (`public/sign-red.png`) — shown on login page, password reset page, and navbar after login
+- **Login page** — logo size reduced, login card larger with rounded corners, inputs and buttons rounded
+- **Password reset page** — same styling as login page
+
+### Permissions & navigation
 - **Apache image** (`kimai/kimai2:apache`) instead of PHP-FPM
-- **Invoicing hidden** — removed from all menus and roles
-- **Live time tracking disabled** — play button hidden, start/stop permissions removed
-- **Default view** — Weekly hours (`/en/quick_entry/`) for all users
-- **Default start time** — 08:00, business hours 08:00–16:00
-- **Weekend columns** — highlighted in dark green in the weekly view
-- **Global activity** — "Development" available on all projects by default
-- **Dev users** — 5 pre-created users with Polish names
+- **Invoicing hidden** — removed from all menus and roles (`INVOICE`, `INVOICE_ADMIN` sets stripped)
+- **Live time tracking disabled** — play button hidden via CSS, `start_own_timesheet` / `stop_own_timesheet` permissions removed
+
+### Time tracking defaults
+- **Default view** — Weekly hours (`/en/quick_entry/`) for all users on login
+- **Default start time** — 08:00, business hours 08:00–16:00 in calendar
+- **1 row by default** — weekly view shows 1 row, use `+ Add` for more
+- **Auto-select project** — if a user has only 1 project assigned, it is selected automatically
+- **Auto-select activity** — "Development" activity is selected automatically when project is chosen
+- **Delete row** — trash button on each weekly hours row to remove it
+
+### Visual
+- **Weekend columns** — Saturday and Sunday highlighted in dark green in the weekly view
+- **Global activity** — "Development" available on all projects by default (global, not project-specific)
+
+### Users
+- **5 dev users** pre-created with Polish names (dev1–dev5)
+
+## How customisations work
+
+| File | What it does |
+|---|---|
+| `config/local.yaml` | Kimai permission sets, calendar hours, default start time |
+| `public/custom.css` | Logo sizing, rounded UI on login/reset, green weekends, hides play button |
+| `public/custom.js` | Auto-select project & activity, delete row button in weekly view |
+| `public/sign-red.png` | Scalac logo — mounted into container public directory |
+| `templates/base.html.twig` | Injects `custom.css` + `custom.js`, overrides navbar logo with `sign-red.png` |
+| `templates/login.html.twig` | Injects `custom.css` on login page |
+| `templates/password-reset-layout.html.twig` | Injects `custom.css` + sets body class for logo sizing |
+| DB: `theme.branding.logo` | Points login page logo partial to `/sign-red.png` |
+| DB: `quick_entry.minimum_rows` | Set to `1` — shows 1 row by default in weekly view |
 
 ## Useful commands
 
@@ -88,6 +122,9 @@ docker exec kimai-app /opt/kimai/bin/console kimai:user:list
 # Reload config after editing local.yaml
 docker exec kimai-app /opt/kimai/bin/console kimai:reload --env=prod
 docker exec kimai-app chown -R www-data:www-data /opt/kimai/var/cache
+
+# Apply changes to docker-compose.yml (new volume mounts etc.)
+docker compose up -d --force-recreate kimai
 ```
 
 ## Contributing changes

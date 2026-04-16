@@ -57,9 +57,16 @@ Ctrl+C
 # Otwórz w przeglądarce
 http://localhost:8001
 
-# Login credentials (default)
+# Login credentials
 Email: admin@kimai.local
-Password: admin123
+Password: admin12345
+
+# Dev users
+dev1@kimai.local / devpass1  (Piotr Kowalski)
+dev2@kimai.local / devpass2  (Anna Nowak)
+dev3@kimai.local / devpass3  (Tomasz Wiśniewski)
+dev4@kimai.local / devpass4  (Katarzyna Wójcik)
+dev5@kimai.local / devpass5  (Marek Kamiński)
 ```
 
 ## Database - MySQL
@@ -192,10 +199,43 @@ git checkout -- docker-compose.yml
 ## Struktura Projektu
 
 ```
-~/kimai-local/
-├── docker-compose.yml      ← główny plik konfiguracji
-├── KIMAI_DOCKER_COMMANDS.md ← ten plik (quick reference)
-└── .gitignore             ← (opcjonalnie) ignoruj volumy
+scalac-kimai-timetracker/
+├── docker-compose.yml                        ← główny plik konfiguracji
+├── config/
+│   └── local.yaml                            ← ustawienia Kimai (uprawnienia, godziny)
+├── public/
+│   ├── custom.css                            ← style (logo, zaokrąglenia, weekendy)
+│   ├── custom.js                             ← auto-select projekt/aktywność, usuń wiersz
+│   └── sign-red.png                          ← logo Scalac
+├── templates/
+│   ├── base.html.twig                        ← szablon główny (logo w navbar)
+│   ├── login.html.twig                       ← strona logowania
+│   └── password-reset-layout.html.twig       ← strona resetowania hasła
+├── scripts/
+│   └── setup.sh                              ← jednorazowy setup użytkowników
+└── KIMAI_DOCKER_COMMANDS.md                  ← ten plik
+```
+
+## Customizacje - jak edytować
+
+```bash
+# Zmiana stylów (CSS) - live, bez restartu
+# Edytuj: public/custom.css
+
+# Zmiana zachowania JS - live, bez restartu
+# Edytuj: public/custom.js
+
+# Zmiana uprawnień / godzin / widoku domyślnego
+# Edytuj: config/local.yaml
+# Następnie przeładuj konfigurację:
+docker exec kimai-app /opt/kimai/bin/console kimai:reload --env=prod
+docker exec kimai-app chown -R www-data:www-data /opt/kimai/var/cache
+
+# Zmiana logo - podmień plik
+# Zastąp: public/sign-red.png
+
+# Zastosuj zmiany w docker-compose.yml (nowe volumy itp.)
+docker compose up -d --force-recreate kimai
 ```
 
 ## Szybkie Shortcuts
