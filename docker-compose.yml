@@ -42,6 +42,7 @@ services:
       - ./public/custom.js:/opt/kimai/public/custom.js:ro
       - ./public/sign-red.png:/opt/kimai/public/sign-red.png:ro
       - ./templates/base.html.twig:/opt/kimai/templates/base.html.twig:ro
+      - ./templates/partials/head.html.twig:/opt/kimai/templates/partials/head.html.twig:ro
       - ./templates/login.html.twig:/opt/kimai/templates/security/login.html.twig:ro
       - ./templates/password-reset-layout.html.twig:/opt/kimai/templates/security/password-reset/layout.html.twig:ro
     restart: unless-stopped

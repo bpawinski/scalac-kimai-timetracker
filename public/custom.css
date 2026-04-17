@@ -43,6 +43,9 @@
     border-color: var(--tblr-border-color) !important;
 }
 
+/* Hide Save button on Weekly hours page (auto-save handles it) */
+.quick-entry-page input[type="submit"].btn-primary { display: none !important; }
+
 /* Weekend columns - dark green */
 th.weekend {
     background-color: #145a32 !important;
